@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { Play, Pause, SkipForward, SkipBack, Volume2, VolumeX, ChevronDown, Music, Download, Wifi, WifiOff } from 'lucide-react';
-import type { Reciter, Surah } from '../types';
+import type { Surah } from '../types';
 import { reciters, getSurahAudioUrl } from '../data/reciters';
+import type { ReciterFull } from '../data/reciters';
 import { getCachedAudio, cacheAudio, isAudioCached } from '../utils/audioCache';
 
 interface AudioPlayerProps {
@@ -9,7 +10,7 @@ interface AudioPlayerProps {
 }
 
 export default function AudioPlayer({ surah }: AudioPlayerProps) {
-  const [selectedReciter, setSelectedReciter] = useState<Reciter>(reciters[0]);
+  const [selectedReciter, setSelectedReciter] = useState<ReciterFull>(reciters[0]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -23,8 +24,8 @@ export default function AudioPlayer({ surah }: AudioPlayerProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const currentSrcRef = useRef<string>('');
 
-  const cacheKey = surah ? `${selectedReciter.identifier}_${surah.number}` : '';
-  const remoteUrl = surah ? getSurahAudioUrl(selectedReciter.identifier, surah.number) : '';
+  const cacheKey = surah ? `${selectedReciter.id}_${surah.number}` : '';
+  const remoteUrl = surah ? getSurahAudioUrl(selectedReciter.id, surah.number) : '';
 
   // Check cache and reset on surah/reciter change
   useEffect(() => {
