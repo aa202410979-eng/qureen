@@ -33,14 +33,14 @@ export const reciters: Reciter[] = [
     id: '5',
     name: 'Saad Al-Ghamdi',
     arabicName: 'سعد الغامدي',
-    identifier: 'ar.saoodshuraym',
+    identifier: 'ar.saadalghamdi',
     style: 'مرتل',
   },
   {
     id: '6',
     name: 'Saud Al-Shuraim',
     arabicName: 'سعود الشريم',
-    identifier: 'ar.shaatree',
+    identifier: 'ar.saoodshuraym',
     style: 'مرتل',
   },
   {
@@ -52,18 +52,12 @@ export const reciters: Reciter[] = [
   },
   {
     id: '8',
-    name: 'Ahmad Al-Ajmi',
-    arabicName: 'أحمد بن علي العجمي',
-    identifier: 'ar.ahmadajmi',
+    name: 'Abu Bakr Al-Shatri',
+    arabicName: 'أبو بكر الشاطري',
+    identifier: 'ar.shaatree',
     style: 'مرتل',
   },
 ];
-
-export const getAudioUrl = (reciterIdentifier: string, surahNumber: number, ayahNumber: number): string => {
-  const surahPadded = String(surahNumber).padStart(3, '0');
-  const ayahPadded = String(ayahNumber).padStart(3, '0');
-  return `https://cdn.islamic.network/quran/audio/128/${reciterIdentifier}/${surahPadded}${ayahPadded}.mp3`;
-};
 
 export const getSurahAudioUrl = (reciterIdentifier: string, surahNumber: number): string => {
   const surahPadded = String(surahNumber).padStart(3, '0');

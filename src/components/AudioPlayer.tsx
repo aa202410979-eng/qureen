@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Play, Pause, SkipForward, SkipBack, Volume2, VolumeX, ChevronDown, Music } from 'lucide-react';
+import { Play, Pause, SkipForward, SkipBack, Volume2, VolumeX, ChevronDown, Music, AlertCircle } from 'lucide-react';
 import type { Reciter, Surah } from '../types';
 import { reciters, getSurahAudioUrl } from '../data/reciters';
 
@@ -16,15 +16,19 @@ export default function AudioPlayer({ surah }: AudioPlayerProps) {
   const [muted, setMuted] = useState(false);
   const [showReciters, setShowReciters] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      setIsPlaying(false);
-      setProgress(0);
-      setCurrentTime(0);
-    }
+    if (!audioRef.current) return;
+    audioRef.current.pause();
+    audioRef.current.load();
+    setIsPlaying(false);
+    setProgress(0);
+    setCurrentTime(0);
+    setDuration(0);
+    setError(false);
+    setLoading(false);
   }, [surah, selectedReciter]);
 
   const togglePlay = () => {
@@ -34,17 +38,17 @@ export default function AudioPlayer({ surah }: AudioPlayerProps) {
       setIsPlaying(false);
     } else {
       setLoading(true);
-      audioRef.current.play().then(() => {
-        setIsPlaying(true);
-        setLoading(false);
-      }).catch(() => setLoading(false));
+      setError(false);
+      audioRef.current.play()
+        .then(() => { setIsPlaying(true); setLoading(false); })
+        .catch(() => { setLoading(false); setError(true); });
     }
   };
 
   const handleTimeUpdate = () => {
     if (!audioRef.current) return;
     const ct = audioRef.current.currentTime;
-    const dur = audioRef.current.duration;
+    const dur = audioRef.current.duration || 0;
     setCurrentTime(ct);
     setProgress(dur ? (ct / dur) * 100 : 0);
   };
@@ -57,12 +61,11 @@ export default function AudioPlayer({ surah }: AudioPlayerProps) {
     if (!audioRef.current || !duration) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
-    const pct = x / rect.width;
-    audioRef.current.currentTime = pct * duration;
+    audioRef.current.currentTime = (x / rect.width) * duration;
   };
 
   const formatTime = (s: number) => {
-    if (!s || isNaN(s)) return '0:00';
+    if (!s || isNaN(s) || !isFinite(s)) return '0:00';
     const m = Math.floor(s / 60);
     const sec = Math.floor(s % 60);
     return `${m}:${sec.toString().padStart(2, '0')}`;
@@ -71,65 +74,81 @@ export default function AudioPlayer({ surah }: AudioPlayerProps) {
   const audioUrl = surah ? getSurahAudioUrl(selectedReciter.identifier, surah.number) : '';
 
   return (
-    <div className="bg-quran-gradient text-white rounded-2xl p-4 shadow-lg">
+    <div className="rounded-2xl p-3 sm:p-4 shadow-lg" style={{background:'linear-gradient(135deg,#065f46,#047857,#059669)'}}>
       <audio
         ref={audioRef}
         src={audioUrl}
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
-        onEnded={() => setIsPlaying(false)}
+        onEnded={() => { setIsPlaying(false); setProgress(0); setCurrentTime(0); }}
+        onError={() => { setError(true); setLoading(false); setIsPlaying(false); }}
         muted={muted}
-        preload="metadata"
+        preload="none"
       />
 
-      {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <Music size={16} className="text-emerald-200" />
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-1.5">
+          <Music size={14} className="text-emerald-200" />
           <span className="text-xs text-emerald-200">مشغّل القرآن</span>
         </div>
-        {surah && (
-          <div className="text-center">
-            <p className="font-bold arabic-text text-lg leading-tight">{surah.name}</p>
-            <p className="text-xs text-emerald-200">{surah.numberOfAyahs} آية</p>
-          </div>
-        )}
-        {!surah && <p className="text-sm text-emerald-200">اختر سورة للاستماع</p>}
+        <div className="text-center">
+          {surah ? (
+            <>
+              <p className="font-bold text-white text-sm sm:text-base leading-tight" style={{fontFamily:'Amiri,serif'}}>{surah.name}</p>
+              <p className="text-xs text-emerald-200">{surah.numberOfAyahs} آية</p>
+            </>
+          ) : (
+            <p className="text-xs text-emerald-200">اختر سورة للاستماع</p>
+          )}
+        </div>
+        <button onClick={() => setMuted(!muted)} className="text-emerald-200 hover:text-white transition-colors p-1">
+          {muted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+        </button>
       </div>
 
       {/* Reciter selector */}
-      <div className="relative mb-4">
+      <div className="relative mb-3">
         <button
           onClick={() => setShowReciters(!showReciters)}
           className="w-full flex items-center justify-between bg-white/10 hover:bg-white/20 rounded-xl px-3 py-2 transition-colors"
         >
-          <ChevronDown size={16} className={`transition-transform ${showReciters ? 'rotate-180' : ''}`} />
-          <div className="text-right">
-            <p className="text-sm font-semibold">{selectedReciter.arabicName}</p>
-            <p className="text-xs text-emerald-200">{selectedReciter.style}</p>
+          <ChevronDown size={16} className={`text-emerald-200 transition-transform flex-shrink-0 ${showReciters ? 'rotate-180' : ''}`} />
+          <div className="text-right flex-1 mr-2">
+            <p className="text-sm font-semibold text-white">{selectedReciter.arabicName}</p>
           </div>
         </button>
         {showReciters && (
-          <div className="absolute bottom-full mb-1 right-0 left-0 bg-white rounded-xl shadow-xl overflow-hidden z-50 max-h-56 overflow-y-auto">
+          <div className="absolute bottom-full mb-1 right-0 left-0 bg-white rounded-xl shadow-2xl overflow-hidden z-50 max-h-52 overflow-y-auto border border-emerald-100">
             {reciters.map(r => (
               <button
                 key={r.id}
                 onClick={() => { setSelectedReciter(r); setShowReciters(false); }}
-                className={`w-full flex items-center justify-between px-4 py-2.5 hover:bg-emerald-50 transition-colors ${
-                  selectedReciter.id === r.id ? 'bg-emerald-50 text-emerald-700' : 'text-gray-700'
+                className={`w-full flex items-center justify-between px-4 py-3 hover:bg-emerald-50 transition-colors border-b border-gray-50 last:border-0 ${
+                  selectedReciter.id === r.id ? 'bg-emerald-50' : ''
                 }`}
               >
-                <span className="text-xs text-gray-400">{r.style}</span>
-                <span className="font-semibold text-sm">{r.arabicName}</span>
+                {selectedReciter.id === r.id && (
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 flex-shrink-0" />
+                )}
+                {selectedReciter.id !== r.id && <span className="w-2 h-2 flex-shrink-0" />}
+                <span className={`font-semibold text-sm ${selectedReciter.id === r.id ? 'text-emerald-700' : 'text-gray-700'}`}>{r.arabicName}</span>
               </button>
             ))}
           </div>
         )}
       </div>
 
-      {/* Progress */}
-      <div className="mb-3">
-        <div className="progress-bar" onClick={handleProgressClick}>
+      {/* Error message */}
+      {error && (
+        <div className="flex items-center gap-2 bg-red-500/20 rounded-lg px-3 py-2 mb-2">
+          <AlertCircle size={14} className="text-red-200 flex-shrink-0" />
+          <p className="text-xs text-red-200">تعذّر تحميل الصوت. تأكد من اتصال الإنترنت وأعد المحاولة.</p>
+        </div>
+      )}
+
+      {/* Progress bar */}
+      <div className="mb-2">
+        <div className="progress-bar cursor-pointer" onClick={handleProgressClick}>
           <div className="progress-fill" style={{ width: `${progress}%` }} />
         </div>
         <div className="flex justify-between text-xs text-emerald-200 mt-1">
@@ -139,20 +158,14 @@ export default function AudioPlayer({ surah }: AudioPlayerProps) {
       </div>
 
       {/* Controls */}
-      <div className="flex items-center justify-center gap-6">
-        <button
-          onClick={() => setMuted(!muted)}
-          className="text-emerald-200 hover:text-white transition-colors"
-        >
-          {muted ? <VolumeX size={18} /> : <Volume2 size={18} />}
-        </button>
+      <div className="flex items-center justify-center gap-5 sm:gap-6">
         <button className="text-emerald-200 hover:text-white transition-colors">
           <SkipBack size={22} />
         </button>
         <button
           onClick={togglePlay}
           disabled={!surah || loading}
-          className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-emerald-700 hover:scale-105 transition-transform disabled:opacity-50 shadow-lg"
+          className="w-11 h-11 sm:w-12 sm:h-12 bg-white rounded-full flex items-center justify-center text-emerald-700 hover:scale-105 transition-transform disabled:opacity-50 shadow-lg active:scale-95"
         >
           {loading ? (
             <div className="w-5 h-5 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin" />
