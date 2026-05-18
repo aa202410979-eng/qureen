@@ -70,3 +70,21 @@ button:active { opacity: 0.85; }
 /* Scrollbar hide utility */
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Mushaf page */
+.mushaf-page {
+  background: transparent;
+}
+
+.mushaf-text .ayah-span {
+  display: inline;
+}
+
+/* Subtle highlight on ayah number hover */
+.mushaf-text .ayah-num {
+  cursor: default;
+  transition: color 0.15s;
+}
+.mushaf-text .ayah-num:hover {
+  color: #c8960c;
+}
