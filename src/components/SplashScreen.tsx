@@ -46,37 +46,37 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
       <div className="flex flex-col items-center gap-6 px-8">
         {/* Logo */}
         <div className="relative">
-          {/* Glow ring */}
-          <div
-            className="absolute inset-0 rounded-full"
-            style={{
-              background: 'radial-gradient(circle, rgba(212,180,67,0.3) 0%, transparent 70%)',
-              transform: 'scale(1.8)',
-            }}
-          />
           {/* Logo SVG */}
-          <div className="relative w-40 h-40 rounded-full flex items-center justify-center shadow-2xl"
-            style={{ background: 'linear-gradient(145deg, #059669, #047857)' }}>
-            <svg width="110" height="110" viewBox="0 0 100 100" fill="none">
-              {/* Minaret */}
-              <rect x="47" y="6" width="6" height="26" rx="3" fill="#d4b483"/>
-              <ellipse cx="50" cy="6" rx="4.5" ry="5.5" fill="#d4b483"/>
-              {/* Crescent */}
-              <path d="M50 1 Q55 0 55 5 Q51.5 3.5 50 7 Q48.5 3.5 45 5 Q45 0 50 1Z" fill="#d4b483"/>
-              {/* Dome arch */}
-              <path d="M32 38 Q50 18 68 38Z" fill="#d4b483"/>
-              {/* Open Quran */}
-              <path d="M18 54 Q34 43 50 49 Q66 43 82 54 L82 84 Q66 74 50 80 Q34 74 18 84Z"
-                fill="#d4b483" opacity="0.92"/>
-              <line x1="50" y1="49" x2="50" y2="82" stroke="#059669" strokeWidth="1.5"/>
-              {/* Page lines left */}
-              <line x1="24" y1="60" x2="46" y2="57" stroke="#059669" strokeWidth="1" opacity="0.55"/>
-              <line x1="24" y1="66" x2="46" y2="63" stroke="#059669" strokeWidth="1" opacity="0.55"/>
-              <line x1="24" y1="72" x2="46" y2="69" stroke="#059669" strokeWidth="1" opacity="0.55"/>
-              {/* Page lines right */}
-              <line x1="54" y1="57" x2="76" y2="60" stroke="#059669" strokeWidth="1" opacity="0.55"/>
-              <line x1="54" y1="63" x2="76" y2="66" stroke="#059669" strokeWidth="1" opacity="0.55"/>
-              <line x1="54" y1="69" x2="76" y2="72" stroke="#059669" strokeWidth="1" opacity="0.55"/>
+          <div className="relative w-44 h-44 flex items-center justify-center">
+            <svg width="176" height="176" viewBox="0 0 200 200" fill="none">
+              {/* Minaret body – two thin vertical lines */}
+              <line x1="97" y1="28" x2="97" y2="80" stroke="#d4b483" strokeWidth="2.2"/>
+              <line x1="103" y1="28" x2="103" y2="80" stroke="#d4b483" strokeWidth="2.2"/>
+              {/* Minaret arch */}
+              <path d="M92 50 Q100 38 108 50" fill="none" stroke="#d4b483" strokeWidth="2.2"/>
+              {/* Crescent at top of minaret */}
+              <path d="M100 20 Q106 17 106 23 Q103 21 100 24 Q97 21 94 23 Q94 17 100 20Z" fill="#d4b483"/>
+              {/* Ball under crescent */}
+              <circle cx="100" cy="27" r="2.5" fill="#d4b483"/>
+              {/* Dome – circle outline */}
+              <path d="M62 82 A38 38 0 0 1 138 82" fill="none" stroke="#d4b483" strokeWidth="2.5"/>
+              {/* Small crescent on dome (left) */}
+              <path d="M68 66 Q65 61 68 57 Q66.5 60 70 61.5 Q68 63 68 66Z" fill="#d4b483"/>
+              <circle cx="68" cy="67" r="1.6" fill="#d4b483"/>
+              {/* Open Quran – left wing */}
+              <line x1="100" y1="86" x2="44" y2="112" stroke="#d4b483" strokeWidth="2"/>
+              <line x1="100" y1="92" x2="44" y2="118" stroke="#d4b483" strokeWidth="2"/>
+              <line x1="100" y1="98" x2="45" y2="125" stroke="#d4b483" strokeWidth="2"/>
+              <line x1="100" y1="104" x2="47" y2="132" stroke="#d4b483" strokeWidth="2"/>
+              <line x1="44" y1="112" x2="47" y2="132" stroke="#d4b483" strokeWidth="2"/>
+              {/* Open Quran – right wing */}
+              <line x1="100" y1="86" x2="156" y2="112" stroke="#d4b483" strokeWidth="2"/>
+              <line x1="100" y1="92" x2="156" y2="118" stroke="#d4b483" strokeWidth="2"/>
+              <line x1="100" y1="98" x2="155" y2="125" stroke="#d4b483" strokeWidth="2"/>
+              <line x1="100" y1="104" x2="153" y2="132" stroke="#d4b483" strokeWidth="2"/>
+              <line x1="156" y1="112" x2="153" y2="132" stroke="#d4b483" strokeWidth="2"/>
+              {/* Arabic "قرآن" calligraphy */}
+              <text x="100" y="112" textAnchor="middle" fill="#d4b483" fontSize="18" fontFamily="Amiri, serif" fontWeight="bold">قرآن</text>
             </svg>
           </div>
         </div>

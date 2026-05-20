@@ -3,17 +3,94 @@
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-html, body { overscroll-behavior: none; }
+html, body { overscroll-behavior: none; margin: 0; padding: 0; }
 
 body {
-  margin: 0;
   font-family: 'Cairo', sans-serif;
   direction: rtl;
-  background: #f8fafc;
   -webkit-font-smoothing: antialiased;
 }
 
-#root { min-height: 100vh; min-height: 100dvh; }
+/* ── Mobile: full screen, no frame ── */
+@media (max-width: 599px) {
+  body { background: #f8fafc; }
+  .phone-wrap { display: contents; }
+  .phone-frame { display: contents; }
+  .phone-notch { display: none; }
+  .phone-home-bar { display: none; }
+  .phone-screen { display: contents; }
+  #root { min-height: 100dvh; }
+}
+
+/* ── Desktop: phone frame mockup ── */
+@media (min-width: 600px) {
+  body {
+    background: linear-gradient(135deg, #0a1628 0%, #0d2137 40%, #0a2744 70%, #071d33 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .phone-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    min-height: 100vh;
+  }
+
+  .phone-frame {
+    width: 393px;
+    height: 852px;
+    background: #101010;
+    border-radius: 54px;
+    padding: 14px;
+    position: relative;
+    box-shadow:
+      0 0 0 1px #3a3a3a,
+      0 0 0 2px #1a1a1a,
+      0 40px 120px rgba(0,0,0,0.8),
+      0 0 60px rgba(13,107,86,0.15);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Dynamic Island notch */
+  .phone-notch {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 126px;
+    height: 37px;
+    background: #101010;
+    border-radius: 20px;
+    z-index: 9999;
+  }
+
+  .phone-screen {
+    flex: 1;
+    border-radius: 42px;
+    overflow: hidden;
+    background: #f8fafc;
+    position: relative;
+  }
+
+  .phone-home-bar {
+    height: 6px;
+    width: 140px;
+    background: #3a3a3a;
+    border-radius: 3px;
+    margin: 10px auto 2px;
+  }
+
+  #root {
+    height: 100%;
+    min-height: unset;
+    overflow: hidden;
+  }
+}
 
 .arabic-text {
   font-family: 'Amiri', serif;
