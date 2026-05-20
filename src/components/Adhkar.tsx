@@ -33,7 +33,7 @@ export default function Adhkar() {
   const progress = (totalCompleted / filtered.length) * 100;
 
   return (
-    <div className="min-h-[calc(100vh-64px)] bg-gradient-to-b from-blue-50 to-indigo-50">
+    <div className="h-full overflow-y-auto bg-gradient-to-b from-blue-50 to-indigo-50">
       {/* Header */}
       <div className="bg-adhkar-gradient text-white p-5 shadow-lg">
         <h1 className="text-2xl font-bold arabic-text mb-1">الأذكار</h1>

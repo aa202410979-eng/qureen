@@ -43,11 +43,11 @@ export default function QuranReader() {
   };
 
   return (
-    <div className="flex h-[calc(100dvh-56px)] sm:h-[calc(100dvh-64px)] relative overflow-hidden">
+    <div className="flex h-full relative overflow-hidden">
 
       {/* Mobile drawer */}
       {showMobileList && (
-        <div className="fixed inset-0 z-50 md:hidden flex">
+        <div className="absolute inset-0 z-50 flex">
           <div className="absolute inset-0 bg-black/50" onClick={() => setShowMobileList(false)} />
           <div className="relative w-4/5 max-w-sm bg-white h-full shadow-2xl flex flex-col mr-auto">
             <div className="flex items-center justify-between px-4 py-3 bg-emerald-700">

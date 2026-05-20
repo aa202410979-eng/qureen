@@ -59,7 +59,7 @@ export default function Duas() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-64px)] bg-gradient-to-b from-purple-50 to-violet-50">
+    <div className="h-full overflow-y-auto bg-gradient-to-b from-purple-50 to-violet-50">
       {/* Header */}
       <div className="bg-dua-gradient text-white p-5 shadow-lg">
         <div className="flex items-center gap-3 mb-2">

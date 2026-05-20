@@ -26,7 +26,7 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
 
   return (
     <div
-      className="fixed inset-0 flex flex-col items-center justify-between z-[999] overflow-hidden"
+      className="absolute inset-0 flex flex-col items-center justify-between z-[999] overflow-hidden"
       style={{
         background: 'linear-gradient(160deg, #064e3b 0%, #065f46 40%, #047857 70%, #065f46 100%)',
         opacity: fadeOut ? 0 : 1,

@@ -13,13 +13,13 @@ body {
 
 /* ── Mobile: full screen, no frame ── */
 @media (max-width: 599px) {
-  body { background: #f8fafc; }
+  body { background: #f8fafc; height: 100dvh; }
   .phone-wrap { display: contents; }
   .phone-frame { display: contents; }
   .phone-notch { display: none; }
   .phone-home-bar { display: none; }
   .phone-screen { display: contents; }
-  #root { min-height: 100dvh; }
+  #root { height: 100dvh; }
 }
 
 /* ── Desktop: phone frame mockup ── */

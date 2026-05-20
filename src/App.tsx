@@ -63,7 +63,7 @@ export default function App() {
   }
 
   return (
-    <div className="flex flex-col h-[100dvh] bg-gray-50 overflow-hidden" dir="rtl">
+    <div className="flex flex-col h-full bg-gray-50 overflow-hidden" dir="rtl">
       {/* Mobile header */}
       <header className="bg-white border-b border-gray-100 shadow-sm flex-shrink-0 z-40">
         <div className="flex items-center justify-between px-4 h-14">

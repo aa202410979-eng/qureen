@@ -103,7 +103,7 @@ export default function Qibla() {
   ];
 
   return (
-    <div className="min-h-[calc(100vh-64px)] bg-gradient-to-b from-amber-50 to-orange-50 p-4">
+    <div className="h-full overflow-y-auto bg-gradient-to-b from-amber-50 to-orange-50 p-4">
       <div className="max-w-lg mx-auto">
         {/* Header */}
         <div className="bg-qibla-gradient rounded-2xl p-5 text-white mb-6 shadow-lg">
