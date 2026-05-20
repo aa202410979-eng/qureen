@@ -4,9 +4,6 @@ import type { Reciter } from '../types';
 const qdc = (slug: string, n: number) =>
   `https://download.quranicaudio.com/qdc/${slug}/murattal/${n}.mp3`;
 
-const qua = (slug: string, n: number) =>
-  `https://download.quranicaudio.com/quran/${slug}/${String(n).padStart(3, '0')}.mp3`;
-
 const quaDouble = (slug: string, n: number) =>
   `https://download.quranicaudio.com/quran/${slug}//${String(n).padStart(3, '0')}.mp3`;
 
@@ -54,14 +51,6 @@ export const reciters: ReciterFull[] = [
     identifier: 'ghamdi',
     style: 'مرتل',
     getUrl: (n) => quaDouble('sa3d_al-ghaamidi/complete', n),
-  },
-  {
-    id: '6',
-    name: 'Saud Al-Shuraim',
-    arabicName: 'سعود الشريم',
-    identifier: 'shuraym',
-    style: 'مرتل',
-    getUrl: (n) => qua('saud_ash-shuraym/murattal', n),
   },
   {
     id: '7',
