@@ -149,7 +149,8 @@ export default function QuranReader() {
                     fontFamily:'Amiri,serif',
                     fontSize: `${fontSize + 4}px`,
                     lineHeight: 2.2,
-                    letterSpacing: '0.02em',
+                    direction: 'rtl',
+                    unicodeBidi: 'plaintext',
                   }}>
                     بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
                   </p>
@@ -163,11 +164,11 @@ export default function QuranReader() {
                 style={{
                   fontFamily: 'Amiri, serif',
                   fontSize: `${fontSize}px`,
-                  lineHeight: 2.4,
+                  lineHeight: 2.6,
                   color: '#2d1a00',
-                  wordSpacing: '0.12em',
-                  textAlign: 'justify',
-                  textAlignLast: 'right',
+                  textAlign: 'right',
+                  direction: 'rtl',
+                  unicodeBidi: 'plaintext',
                 }}
               >
                 {surahDetail.ayahs.map((ayah, idx) => (

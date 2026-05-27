@@ -48,6 +48,9 @@ await p.route('**/api.alquran.cloud/v1/surah/18/**', r => r.fulfill({
   body: JSON.stringify({ code: 200, data: { ...SURAHS[17], ayahs: KAHF_AYAHS, revelationType: 'Meccan' } }),
 }));
 await p.route('**/fonts.googleapis.com/**', r => r.abort());
+// Mock audio so no error shows
+await p.route('**/download.quranicaudio.com/**', r => r.fulfill({ status: 200, contentType: 'audio/mpeg', body: Buffer.alloc(0) }));
+await p.route('**/quranicaudio.com/**', r => r.fulfill({ status: 200, contentType: 'audio/mpeg', body: Buffer.alloc(0) }));
 
 // ── 1. Splash ─────────────────────────────────────────────
 await p.goto(BASE, { waitUntil: 'domcontentloaded' });
