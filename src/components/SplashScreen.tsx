@@ -93,7 +93,7 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
         <div className="text-center">
           <h1 className="font-bold text-5xl mb-2"
             style={{ fontFamily: 'Amiri,serif', color: '#d4af37', textShadow: '0 0 30px rgba(212,175,55,0.4)', letterSpacing: '0.04em' }}>
-            القرآن
+            القرآن الكريم
           </h1>
           <div className="flex items-center gap-3 justify-center mb-3">
             <div className="w-10 h-px" style={{ background: 'rgba(212,175,55,0.4)' }} />
