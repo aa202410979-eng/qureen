@@ -10,13 +10,12 @@ export default function QuranReader() {
   const [loading, setLoading] = useState(false);
   const [showList, setShowList] = useState(true);
   const [showMobileList, setShowMobileList] = useState(false);
-  const [fontSize, setFontSize] = useState(22); // px
+  const [fontSize, setFontSize] = useState(22);
   const contentRef = useRef<HTMLDivElement>(null);
 
   const fetchSurah = useCallback((surah: Surah) => {
     setLoading(true);
     setSurahDetail(null);
-    // Use quran-uthmani for proper mushaf script
     fetch(`https://api.alquran.cloud/v1/surah/${surah.number}/quran-uthmani`)
       .then(r => r.json())
       .then(data => {
@@ -48,15 +47,11 @@ export default function QuranReader() {
       {/* Mobile drawer */}
       {showMobileList && (
         <div className="absolute inset-0 z-50 flex">
-          <div className="absolute inset-0 bg-black/70" onClick={() => setShowMobileList(false)} />
-          <div className="relative w-4/5 max-w-sm h-full shadow-2xl flex flex-col mr-auto"
-            style={{ background: '#0d1526', borderLeft: '1px solid rgba(212,175,55,0.15)' }}>
-            <div className="flex items-center justify-between px-4 py-3"
-              style={{ borderBottom: '1px solid rgba(212,175,55,0.15)', background: '#080d18' }}>
-              <button onClick={() => setShowMobileList(false)}>
-                <X size={22} style={{ color: '#d4af37' }} />
-              </button>
-              <span className="font-bold text-base" style={{ fontFamily:'Amiri,serif', color:'#d4af37' }}>قائمة السور</span>
+          <div className="absolute inset-0 bg-black/50" onClick={() => setShowMobileList(false)} />
+          <div className="relative w-4/5 max-w-sm bg-white h-full shadow-2xl flex flex-col mr-auto">
+            <div className="flex items-center justify-between px-4 py-3 bg-emerald-700">
+              <button onClick={() => setShowMobileList(false)}><X size={22} className="text-white" /></button>
+              <span className="text-white font-bold text-base" style={{ fontFamily: 'Amiri,serif' }}>قائمة السور</span>
             </div>
             <div className="flex-1 overflow-hidden">
               <SurahList onSelectSurah={handleSelectSurah} selectedSurah={selectedSurah} />
@@ -65,70 +60,58 @@ export default function QuranReader() {
         </div>
       )}
 
-      {/* Desktop sidebar – hidden on mobile */}
-      <div className={`hidden md:flex flex-col transition-all duration-300 ${showList ? 'w-72' : 'w-0 overflow-hidden'}`}
-        style={{ borderLeft: '1px solid rgba(212,175,55,0.15)', background: '#0d1526' }}>
+      {/* Desktop sidebar */}
+      <div className={`hidden md:flex flex-col transition-all duration-300 border-l border-amber-200 bg-white ${showList ? 'w-72' : 'w-0 overflow-hidden'}`}>
         <SurahList onSelectSurah={handleSelectSurah} selectedSurah={selectedSurah} />
       </div>
 
       {/* Main */}
-      <div className="flex-1 flex flex-col overflow-hidden" style={{ background: '#080d18' }}>
+      <div className="flex-1 flex flex-col overflow-hidden" style={{ background: 'linear-gradient(170deg,#fdf8ed 0%,#fef6e0 60%,#fdf0cc 100%)' }}>
 
         {/* Toolbar */}
-        <div className="flex items-center gap-2 px-3 py-2 flex-shrink-0"
-          style={{ background: '#0d1526', borderBottom: '1px solid rgba(212,175,55,0.12)' }}>
-          <button onClick={() => { setShowList(!showList); setShowMobileList(true); }}
-            className="md:hidden p-1.5 rounded-lg" style={{ color: '#d4af37' }}>
-            <Menu size={20} />
+        <div className="flex items-center gap-2 px-3 py-2 bg-amber-50/80 backdrop-blur border-b border-amber-200 shadow-sm flex-shrink-0">
+          <button onClick={() => { setShowList(!showList); setShowMobileList(true); }} className="md:hidden p-1.5 hover:bg-amber-100 rounded-lg">
+            <Menu size={20} className="text-emerald-700" />
           </button>
-          <button onClick={() => setShowList(!showList)}
-            className="hidden md:flex p-1.5 rounded-lg" style={{ color: '#d4af37' }}>
-            <BookOpen size={18} />
+          <button onClick={() => setShowList(!showList)} className="hidden md:flex p-1.5 hover:bg-amber-100 rounded-lg">
+            <BookOpen size={18} className="text-emerald-700" />
           </button>
 
           {selectedSurah ? (
             <>
-              <button onClick={() => navigateSurah('prev')} disabled={selectedSurah.number <= 1}
-                className="p-1 rounded-lg disabled:opacity-30" style={{ color: '#d4af37' }}>
-                <ChevronLeft size={18} />
+              <button onClick={() => navigateSurah('prev')} disabled={selectedSurah.number <= 1} className="p-1 hover:bg-amber-100 rounded-lg disabled:opacity-30">
+                <ChevronLeft size={18} className="text-gray-600" />
               </button>
               <div className="flex-1 text-center">
-                <span className="font-bold text-base" style={{ fontFamily:'Amiri,serif', color:'#f0e6c8' }}>{selectedSurah.name}</span>
-                <span className="text-xs mx-1.5" style={{ color:'rgba(212,175,55,0.4)' }}>·</span>
-                <span className="text-xs" style={{ color:'#6b7280' }}>{selectedSurah.numberOfAyahs} آية</span>
+                <span className="font-bold text-amber-900 text-base" style={{ fontFamily: 'Amiri,serif' }}>{selectedSurah.name}</span>
+                <span className="text-gray-400 text-xs mx-1.5">·</span>
+                <span className="text-gray-500 text-xs">{selectedSurah.numberOfAyahs} آية</span>
               </div>
-              <button onClick={() => navigateSurah('next')} disabled={selectedSurah.number >= 114}
-                className="p-1 rounded-lg disabled:opacity-30" style={{ color: '#d4af37' }}>
-                <ChevronRight size={18} />
+              <button onClick={() => navigateSurah('next')} disabled={selectedSurah.number >= 114} className="p-1 hover:bg-amber-100 rounded-lg disabled:opacity-30">
+                <ChevronRight size={18} className="text-gray-600" />
               </button>
             </>
           ) : (
-            <div className="flex-1 text-center text-sm" style={{ color: 'rgba(212,175,55,0.6)' }}>اختر سورة</div>
+            <div className="flex-1 text-center text-sm text-amber-700">اختر سورة</div>
           )}
 
           {/* Font controls */}
-          <div className="flex items-center gap-0.5 rounded-lg overflow-hidden"
-            style={{ border: '1px solid rgba(212,175,55,0.2)', background: 'rgba(212,175,55,0.05)' }}>
-            <button onClick={() => setFontSize(s => Math.max(16, s - 2))}
-              className="px-2 py-1 text-sm font-bold" style={{ color: '#d4af37' }}>−</button>
-            <button onClick={() => setFontSize(s => Math.min(38, s + 2))}
-              className="px-2 py-1 text-sm font-bold" style={{ color: '#d4af37' }}>+</button>
+          <div className="flex items-center gap-0.5 bg-amber-100 border border-amber-300 rounded-lg overflow-hidden">
+            <button onClick={() => setFontSize(s => Math.max(16, s - 2))} className="px-2 py-1 text-amber-800 hover:bg-amber-200 text-sm font-bold">−</button>
+            <button onClick={() => setFontSize(s => Math.min(38, s + 2))} className="px-2 py-1 text-amber-800 hover:bg-amber-200 text-sm font-bold">+</button>
           </div>
         </div>
 
         {/* Quran content */}
         <div ref={contentRef} className="flex-1 overflow-y-auto">
           {!selectedSurah && !loading && (
-            <div className="flex flex-col items-center justify-center h-full text-center p-8 gap-5">
-              <div className="w-24 h-24 rounded-full flex items-center justify-center"
-                style={{ background: 'rgba(212,175,55,0.08)', border: '1px solid rgba(212,175,55,0.2)' }}>
-                <span style={{ fontSize: '2.8rem' }}>📖</span>
+            <div className="flex flex-col items-center justify-center h-full text-center p-8 gap-4">
+              <div className="w-24 h-24 rounded-full bg-amber-100 flex items-center justify-center">
+                <span className="text-5xl">📖</span>
               </div>
-              <h2 className="text-3xl font-bold" style={{ fontFamily:'Amiri,serif', color:'#d4af37' }}>القرآن الكريم</h2>
-              <p className="text-sm" style={{ color:'#6b7280' }}>اختر سورة من القائمة لتبدأ القراءة</p>
-              <button onClick={() => setShowMobileList(true)}
-                className="md:hidden px-8 py-3 rounded-2xl font-bold shadow-lg"
-                style={{ background: 'linear-gradient(135deg,#d4af37,#b8960c)', color: '#080d18' }}>
+              <h2 className="text-3xl text-amber-800 font-bold" style={{ fontFamily: 'Amiri,serif' }}>القرآن الكريم</h2>
+              <p className="text-amber-600 text-sm">اختر سورة من القائمة لتبدأ القراءة</p>
+              <button onClick={() => setShowMobileList(true)} className="md:hidden px-8 py-3 bg-emerald-600 text-white rounded-2xl font-bold shadow-lg">
                 اختر سورة
               </button>
             </div>
@@ -136,47 +119,46 @@ export default function QuranReader() {
 
           {loading && (
             <div className="flex items-center justify-center h-40">
-              <div className="w-10 h-10 border-4 border-t-transparent rounded-full animate-spin"
-                style={{ borderColor: 'rgba(212,175,55,0.3)', borderTopColor: '#d4af37' }} />
+              <div className="w-10 h-10 border-4 border-amber-500 border-t-transparent rounded-full animate-spin" />
             </div>
           )}
 
           {surahDetail && !loading && (
-            <div className="mx-auto px-4 py-6 max-w-2xl">
+            <div className="mushaf-page mx-auto px-4 sm:px-8 py-6 max-w-2xl">
 
               {/* Surah header */}
-              <div className="text-center mb-6">
-                <div className="inline-block rounded-2xl px-8 py-3"
-                  style={{ background: 'rgba(212,175,55,0.08)', border: '1px solid rgba(212,175,55,0.25)' }}>
-                  <p className="font-bold text-2xl" style={{ fontFamily:'Amiri,serif', color:'#d4af37', letterSpacing:'0.05em' }}>
+              <div className="text-center mb-5">
+                <div className="inline-block border-2 border-amber-400 rounded-xl px-8 py-3"
+                  style={{ background: 'linear-gradient(135deg,#c8960c,#a07208)', boxShadow: '0 2px 12px rgba(160,114,8,0.3)' }}>
+                  <p className="text-white font-bold text-2xl" style={{ fontFamily: 'Amiri,serif', letterSpacing: '0.05em' }}>
                     سُورَةُ {surahDetail.name}
                   </p>
                   <div className="flex items-center justify-center gap-4 mt-1">
-                    <span className="text-xs" style={{ color:'rgba(212,175,55,0.6)' }}>{surahDetail.numberOfAyahs} آية</span>
-                    <span className="text-xs" style={{ color:'rgba(212,175,55,0.3)' }}>·</span>
-                    <span className="text-xs" style={{ color:'rgba(212,175,55,0.6)' }}>{surahDetail.revelationType === 'Meccan' ? 'مكية' : 'مدنية'}</span>
+                    <span className="text-amber-200 text-xs">{surahDetail.numberOfAyahs} آية</span>
+                    <span className="text-amber-300 text-xs">·</span>
+                    <span className="text-amber-200 text-xs">{surahDetail.revelationType === 'Meccan' ? 'مكية' : 'مدنية'}</span>
                   </div>
                 </div>
               </div>
 
               {/* Bismillah */}
               {surahDetail.number !== 1 && surahDetail.number !== 9 && (
-                <div className="text-center mb-6">
-                  <p style={{ fontFamily:'Amiri,serif', fontSize:`${fontSize + 4}px`, lineHeight:2.2, color:'#e8d5a3', direction:'rtl', unicodeBidi:'plaintext' }}>
+                <div className="text-center mb-5">
+                  <p className="text-amber-900" style={{ fontFamily: 'Amiri,serif', fontSize: `${fontSize + 4}px`, lineHeight: 2.2, direction: 'rtl', unicodeBidi: 'plaintext' }}>
                     بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
                   </p>
-                  <div className="w-32 h-px mx-auto mt-2" style={{ background:'rgba(212,175,55,0.2)' }} />
+                  <div className="w-32 h-px bg-amber-300 mx-auto mt-2" />
                 </div>
               )}
 
               {/* Mushaf text */}
               <div className="mushaf-text text-right"
-                style={{ fontFamily:'Amiri,serif', fontSize:`${fontSize}px`, lineHeight:2.6, color:'#e8d5a3', textAlign:'right', direction:'rtl', unicodeBidi:'plaintext' }}>
+                style={{ fontFamily: 'Amiri,serif', fontSize: `${fontSize}px`, lineHeight: 2.6, color: '#2d1a00', textAlign: 'right', direction: 'rtl', unicodeBidi: 'plaintext' }}>
                 {surahDetail.ayahs.map((ayah, idx) => (
                   <span key={ayah.number} className="ayah-span">
                     {ayah.text}
                     <span className="ayah-num inline-flex items-center justify-center mx-1"
-                      style={{ fontFamily:'Amiri,serif', fontSize:`${fontSize - 6}px`, color:'#d4af37', verticalAlign:'middle', lineHeight:1 }}>
+                      style={{ fontFamily: 'Amiri,serif', fontSize: `${fontSize - 6}px`, color: '#8B6914', verticalAlign: 'middle', lineHeight: 1 }}>
                       {' '}﴿{toArabicNum(ayah.numberInSurah)}﴾{' '}
                     </span>
                     {(idx + 1) % 5 === 0 && <span> </span>}
@@ -186,21 +168,19 @@ export default function QuranReader() {
 
               {/* Footer decoration */}
               <div className="flex items-center gap-3 mt-8 mb-2">
-                <div className="flex-1 h-px" style={{ background:'rgba(212,175,55,0.2)' }} />
-                <span style={{ color:'rgba(212,175,55,0.4)', fontSize:'1.2rem' }}>❧</span>
-                <div className="flex-1 h-px" style={{ background:'rgba(212,175,55,0.2)' }} />
+                <div className="flex-1 h-px bg-amber-300" />
+                <span className="text-amber-500 text-lg">❧</span>
+                <div className="flex-1 h-px bg-amber-300" />
               </div>
 
               {/* Navigation */}
               <div className="flex justify-between mt-4">
                 <button onClick={() => navigateSurah('next')} disabled={selectedSurah?.number === 114}
-                  className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold disabled:opacity-30"
-                  style={{ background:'rgba(212,175,55,0.1)', color:'#d4af37', border:'1px solid rgba(212,175,55,0.2)' }}>
+                  className="flex items-center gap-1.5 px-4 py-2 bg-emerald-700 text-white rounded-xl hover:bg-emerald-800 disabled:opacity-30 text-sm font-bold shadow active:scale-95 transition-transform">
                   التالية <ChevronRight size={15} />
                 </button>
                 <button onClick={() => navigateSurah('prev')} disabled={selectedSurah?.number === 1}
-                  className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold disabled:opacity-30"
-                  style={{ background:'rgba(212,175,55,0.1)', color:'#d4af37', border:'1px solid rgba(212,175,55,0.2)' }}>
+                  className="flex items-center gap-1.5 px-4 py-2 bg-emerald-700 text-white rounded-xl hover:bg-emerald-800 disabled:opacity-30 text-sm font-bold shadow active:scale-95 transition-transform">
                   <ChevronLeft size={15} /> السابقة
                 </button>
               </div>
@@ -209,7 +189,7 @@ export default function QuranReader() {
         </div>
 
         {/* Audio player */}
-        <div className="flex-shrink-0 p-2" style={{ background:'#0d1526', borderTop:'1px solid rgba(212,175,55,0.12)' }}>
+        <div className="flex-shrink-0 p-2 sm:p-3 bg-white/60 backdrop-blur border-t border-amber-200">
           <AudioPlayer surah={selectedSurah} />
         </div>
       </div>
@@ -217,7 +197,6 @@ export default function QuranReader() {
   );
 }
 
-// Convert to Eastern Arabic numerals ١٢٣
 function toArabicNum(n: number): string {
   return n.toString().replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[+d]);
 }

@@ -2,14 +2,6 @@ import { useState } from 'react';
 import { Sun, Moon, RotateCcw, Check, ChevronDown, ChevronUp, Star } from 'lucide-react';
 import { adhkarData } from '../data/adhkar';
 
-const GOLD = '#d4af37';
-const GOLD_DIM = 'rgba(212,175,55,0.15)';
-const GOLD_BORDER = 'rgba(212,175,55,0.2)';
-const CREAM = '#f0e6c8';
-const MUTED = '#6b7280';
-const CARD_BG = '#111827';
-const PAGE_BG = '#080d18';
-
 export default function Adhkar() {
   const [tab, setTab] = useState<'morning' | 'evening'>('morning');
   const [counts, setCounts] = useState<Record<number, number>>({});
@@ -33,40 +25,39 @@ export default function Adhkar() {
   const progress = filtered.length ? (totalCompleted / filtered.length) * 100 : 0;
 
   return (
-    <div className="h-full overflow-y-auto" style={{ background: PAGE_BG }}>
+    <div className="h-full overflow-y-auto bg-gradient-to-b from-blue-50 to-indigo-50">
 
       {/* Header */}
-      <div className="p-5 shadow-lg" style={{ background: 'linear-gradient(180deg,#0d1526 0%,#0a1020 100%)', borderBottom: `1px solid ${GOLD_BORDER}` }}>
-        <h1 className="text-2xl font-bold arabic-text mb-1" style={{ color: GOLD }}>الأذكار</h1>
-        <p className="text-sm mb-4" style={{ color: MUTED }}>أذكار الصباح والمساء</p>
+      <div className="bg-adhkar-gradient text-white p-5 shadow-lg">
+        <h1 className="text-2xl font-bold arabic-text mb-1">الأذكار</h1>
+        <p className="text-blue-200 text-sm mb-4">أذكار الصباح والمساء</p>
 
         {/* Tabs */}
         <div className="flex gap-2 mb-4">
-          {[{id:'morning',label:'أذكار الصباح',icon:Sun},{id:'evening',label:'أذكار المساء',icon:Moon}].map(t => (
-            <button key={t.id} onClick={() => setTab(t.id as 'morning'|'evening')}
-              className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl font-semibold text-sm transition-all"
-              style={{
-                background: tab === t.id ? GOLD : GOLD_DIM,
-                color: tab === t.id ? '#080d18' : CREAM,
-                border: `1px solid ${tab === t.id ? GOLD : GOLD_BORDER}`,
-              }}>
-              <t.icon size={16} />
-              {t.label}
-            </button>
-          ))}
+          <button onClick={() => setTab('morning')}
+            className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl font-semibold text-sm transition-all ${
+              tab === 'morning' ? 'bg-white text-blue-700 shadow-md' : 'bg-white/20 text-white hover:bg-white/30'
+            }`}>
+            <Sun size={16} /> أذكار الصباح
+          </button>
+          <button onClick={() => setTab('evening')}
+            className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl font-semibold text-sm transition-all ${
+              tab === 'evening' ? 'bg-white text-indigo-700 shadow-md' : 'bg-white/20 text-white hover:bg-white/30'
+            }`}>
+            <Moon size={16} /> أذكار المساء
+          </button>
         </div>
 
         {/* Progress */}
-        <div className="rounded-xl p-3" style={{ background: GOLD_DIM, border: `1px solid ${GOLD_BORDER}` }}>
+        <div className="bg-white/20 rounded-xl p-3">
           <div className="flex items-center justify-between mb-2">
-            <button onClick={resetAll} className="flex items-center gap-1 text-xs transition-colors" style={{ color: MUTED }}>
+            <button onClick={resetAll} className="flex items-center gap-1 text-xs text-blue-200 hover:text-white transition-colors">
               <RotateCcw size={12} /> إعادة تعيين
             </button>
-            <span className="text-sm font-bold" style={{ color: GOLD }}>{totalCompleted}/{filtered.length} مكتمل</span>
+            <span className="text-sm font-bold">{totalCompleted}/{filtered.length} مكتمل</span>
           </div>
-          <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(212,175,55,0.1)' }}>
-            <div className="h-full rounded-full transition-all duration-500"
-              style={{ width: `${progress}%`, background: `linear-gradient(90deg,${GOLD},#f0d060)` }} />
+          <div className="h-2 bg-white/30 rounded-full overflow-hidden">
+            <div className="h-full bg-white rounded-full transition-all duration-500" style={{ width: `${progress}%` }} />
           </div>
         </div>
       </div>
@@ -76,20 +67,18 @@ export default function Adhkar() {
         {filtered.map((dhikr, index) => {
           const currentCount = counts[dhikr.id] || 0;
           const isCompleted = currentCount >= dhikr.count;
-          const isExp = expanded[dhikr.id];
+          const isExpanded = expanded[dhikr.id];
 
           return (
-            <div key={dhikr.id} className="rounded-2xl overflow-hidden transition-all"
-              style={{ background: CARD_BG, border: `1px solid ${isCompleted ? 'rgba(212,175,55,0.4)' : GOLD_BORDER}` }}>
+            <div key={dhikr.id}
+              className={`bg-white rounded-2xl shadow-sm overflow-hidden transition-all ${isCompleted ? 'ring-2 ring-emerald-400' : ''}`}>
 
               <div className="p-4">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full text-xs flex items-center justify-center font-bold"
-                      style={{ background: GOLD_DIM, color: GOLD }}>{index + 1}</span>
+                    <span className="w-6 h-6 bg-blue-100 text-blue-600 rounded-full text-xs flex items-center justify-center font-bold">{index + 1}</span>
                     {isCompleted && (
-                      <span className="flex items-center gap-1 text-xs px-2 py-0.5 rounded-full"
-                        style={{ color:'#10b981', background:'rgba(16,185,129,0.1)' }}>
+                      <span className="flex items-center gap-1 text-xs text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
                         <Check size={10} /> مكتمل
                       </span>
                     )}
@@ -97,53 +86,44 @@ export default function Adhkar() {
                   {dhikr.count > 1 && (
                     <div className="flex items-center gap-1">
                       {Array.from({ length: Math.min(dhikr.count, 10) }).map((_, i) => (
-                        <div key={i} className="w-2 h-2 rounded-full"
-                          style={{ background: i < currentCount ? GOLD : 'rgba(212,175,55,0.15)' }} />
+                        <div key={i} className={`w-2 h-2 rounded-full ${i < currentCount ? 'bg-emerald-500' : 'bg-gray-200'}`} />
                       ))}
-                      {dhikr.count > 10 && <span className="text-xs" style={{ color: MUTED }}>×{dhikr.count}</span>}
+                      {dhikr.count > 10 && <span className="text-xs text-gray-400">×{dhikr.count}</span>}
                     </div>
                   )}
                 </div>
 
-                <p className="arabic-text text-right leading-loose text-lg mb-3" style={{ color: CREAM }}>
-                  {dhikr.text}
-                </p>
+                <p className="arabic-text text-gray-800 text-right leading-loose text-lg mb-3">{dhikr.text}</p>
 
                 <div className="flex items-center justify-between">
-                  <button onClick={() => toggleExpand(dhikr.id)}
-                    className="text-xs flex items-center gap-1" style={{ color: GOLD }}>
-                    {isExp ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+                  <button onClick={() => toggleExpand(dhikr.id)} className="text-xs text-blue-500 hover:text-blue-700 flex items-center gap-1">
+                    {isExpanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
                     {dhikr.benefit ? 'الفضل' : 'المصدر'}
                   </button>
-                  <span className="text-xs" style={{ color: MUTED }}>{dhikr.source}</span>
+                  <span className="text-xs text-gray-400">{dhikr.source}</span>
                 </div>
 
-                {isExp && dhikr.benefit && (
-                  <div className="mt-2 p-2 rounded-lg flex items-start gap-2"
-                    style={{ background: 'rgba(212,175,55,0.06)', border: `1px solid ${GOLD_BORDER}` }}>
-                    <Star size={14} style={{ color: GOLD, flexShrink: 0, marginTop: '2px' }} />
-                    <p className="text-xs" style={{ color: 'rgba(240,230,200,0.7)' }}>{dhikr.benefit}</p>
+                {isExpanded && dhikr.benefit && (
+                  <div className="mt-2 p-2 bg-amber-50 rounded-lg flex items-start gap-2">
+                    <Star size={14} className="text-amber-500 flex-shrink-0 mt-0.5" />
+                    <p className="text-xs text-amber-700">{dhikr.benefit}</p>
                   </div>
                 )}
               </div>
 
               {/* Counter */}
-              <div className="px-4 py-3 flex items-center justify-between"
-                style={{ borderTop: `1px solid ${GOLD_BORDER}`, background: 'rgba(212,175,55,0.03)' }}>
-                <button onClick={() => reset(dhikr.id)} style={{ color: MUTED }}>
+              <div className="border-t border-gray-100 px-4 py-3 flex items-center justify-between bg-gray-50">
+                <button onClick={() => reset(dhikr.id)} className="text-xs text-gray-400 hover:text-gray-600 transition-colors">
                   <RotateCcw size={14} />
                 </button>
                 <div className="flex items-center gap-4">
-                  <span className="text-lg font-bold" style={{ color: CREAM }}>
-                    {currentCount}<span className="text-sm" style={{ color: MUTED }}>/{dhikr.count}</span>
+                  <span className="text-lg font-bold text-gray-700">
+                    {currentCount}<span className="text-sm text-gray-400">/{dhikr.count}</span>
                   </span>
                   <button onClick={() => increment(dhikr.id, dhikr.count)} disabled={isCompleted}
-                    className="px-6 py-2 rounded-xl text-sm font-bold transition-all active:scale-95"
-                    style={{
-                      background: isCompleted ? 'rgba(16,185,129,0.15)' : `linear-gradient(135deg,${GOLD},#b8960c)`,
-                      color: isCompleted ? '#10b981' : '#080d18',
-                      cursor: isCompleted ? 'default' : 'pointer',
-                    }}>
+                    className={`px-6 py-2 rounded-xl text-sm font-bold transition-all ${
+                      isCompleted ? 'bg-emerald-100 text-emerald-600 cursor-default' : 'bg-blue-600 text-white hover:bg-blue-700 active:scale-95 shadow-sm'
+                    }`}>
                     {isCompleted ? '✓ تم' : 'تسبيح'}
                   </button>
                 </div>
@@ -153,14 +133,11 @@ export default function Adhkar() {
         })}
 
         {totalCompleted === filtered.length && filtered.length > 0 && (
-          <div className="rounded-2xl p-5 text-center shadow-lg"
-            style={{ background: `linear-gradient(135deg,${GOLD},#b8960c)`, color: '#080d18' }}>
+          <div className="bg-emerald-500 text-white rounded-2xl p-5 text-center shadow-lg">
             <div className="text-3xl mb-2">🌟</div>
             <p className="font-bold text-lg arabic-text">أحسنت! أكملت جميع الأذكار</p>
-            <p className="text-sm mt-1 opacity-70">تقبّل الله منك</p>
-            <button onClick={resetAll}
-              className="mt-3 flex items-center gap-2 mx-auto px-4 py-2 rounded-xl text-sm font-bold"
-              style={{ background: 'rgba(8,13,24,0.2)', color: '#080d18' }}>
+            <p className="text-emerald-100 text-sm mt-1">تقبّل الله منك</p>
+            <button onClick={resetAll} className="mt-3 flex items-center gap-2 mx-auto px-4 py-2 bg-white text-emerald-600 rounded-xl text-sm font-bold hover:bg-emerald-50 transition-colors">
               <RotateCcw size={14} /> إعادة البدء
             </button>
           </div>
